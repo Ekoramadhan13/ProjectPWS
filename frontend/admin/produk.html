@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kelola Produk - Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-green-50">
+
+<!-- NAVBAR -->
+<nav class="bg-white shadow-lg sticky top-0 z-50 border-b-4 border-green-500">
+  <div class="max-w-7xl mx-auto px-6 py-4">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+          <i class="fa-solid fa-store text-2xl"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-xl text-gray-800 flex items-center gap-2">
+            <i class="fa-solid fa-leaf text-green-600"></i>
+            Kelola Produk
+          </h1>
+          <p class="text-xs text-gray-500 flex items-center gap-1">
+            <i class="fa-solid fa-apple-whole text-red-500 text-xs"></i>
+            <i class="fa-solid fa-carrot text-orange-500 text-xs"></i>
+            Manajemen Buah & Sayur Segar
+          </p>
+        </div>
+      </div>
+      
+      <button onclick="back()" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-semibold transition shadow-md hover:shadow-lg flex items-center gap-2">
+        <i class="fa-solid fa-arrow-left"></i> Kembali ke Dashboard
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-7xl mx-auto px-6 py-8">
+
+  <!-- HEADER SECTION -->
+  <div class="mb-8 bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
+          <i class="fa-solid fa-seedling text-green-600"></i>
+          Manajemen Produk Segar 
+        </h2>
+        <p class="text-gray-600 mt-2 flex items-center gap-2">
+          <i class="fa-solid fa-circle-info text-green-500"></i>
+          Kelola produk buah dan sayur organik dengan mudah
+        </p>
+      </div>
+      <div class="hidden md:block text-6xl">
+        🥬🍎🥕
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM INPUT -->
+  <div class="bg-white rounded-xl shadow-lg mb-8 overflow-hidden border-t-4 border-green-500">
+    <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4">
+      <h3 class="text-white font-bold text-lg flex items-center gap-2">
+        <i class="fa-solid fa-pen-to-square"></i>
+        <span id="formTitle">Tambah Produk Baru</span>
+      </h3>
+      <p class="text-green-100 text-sm mt-1">Isi formulir di bawah untuk menambah produk</p>
+    </div>
+    
+    <div class="p-6 bg-gradient-to-br from-white to-green-50">
+      <input type="hidden" id="id">
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Column 1 -->
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-2">
+              <i class="fa-solid fa-tag text-green-600"></i> Nama Produk
+            </label>
+            <input id="nama" type="text" placeholder="Contoh: Apel Fuji Premium" 
+                   class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-2">
+              <i class="fa-solid fa-layer-group text-green-600"></i> Kategori Produk
+            </label>
+            <select id="kategori" class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition">
+              <option value="Buah">🍎 Buah-buahan</option>
+              <option value="Sayur">🥬 Sayur-sayuran</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Column 2 -->
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-2">
+              <i class="fa-solid fa-money-bill-wave text-green-600"></i> Harga (Rupiah)
+            </label>
+            <input id="harga" type="number" placeholder="Contoh: 25000" 
+                   class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-2">
+              <i class="fa-solid fa-box-open text-green-600"></i> Stok Tersedia
+            </label>
+            <input id="stok" type="number" placeholder="Contoh: 100" 
+                   class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition">
+          </div>
+        </div>
+      </div>
+
+      <!-- URL Foto -->
+      <div class="mt-4">
+        <label class="block text-sm font-bold text-gray-700 mb-2">
+          <i class="fa-solid fa-image text-green-600"></i> URL Foto Produk
+        </label>
+        <input id="foto" type="text" placeholder="https://example.com/foto-produk.jpg" 
+               class="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition">
+        <p class="text-xs text-gray-500 mt-1 flex items-center gap-1">
+          <i class="fa-solid fa-circle-info"></i>
+          Masukkan URL gambar produk berkualitas tinggi (opsional)
+        </p>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex gap-3 mt-6">
+        <button onclick="simpan()" class="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-bold transition shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+          <i class="fa-solid fa-floppy-disk"></i>
+          <span id="btnText">Simpan Produk</span>
+        </button>
+        <button onclick="resetForm()" class="bg-white hover:bg-gray-100 text-gray-800 border-2 border-gray-300 px-6 py-3 rounded-lg font-bold transition shadow-md hover:shadow-lg flex items-center gap-2">
+          <i class="fa-solid fa-rotate-left"></i> Reset Form
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH & FILTER -->
+  <div class="bg-white rounded-xl shadow-lg mb-8 p-6 border-l-4 border-green-500">
+    <h3 class="font-bold text-lg text-gray-800 mb-4 flex items-center gap-2">
+      <i class="fa-solid fa-filter text-green-600"></i>
+      Cari & Filter Produk
+    </h3>
+    
+    <div class="grid md:grid-cols-3 gap-4">
+      <div class="relative">
+        <input id="searchNama" type="text" placeholder="Cari nama produk..." 
+               class="w-full border-2 border-gray-300 rounded-lg pl-10 pr-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition">
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-4 text-gray-400"></i>
+      </div>
+      
+      <select id="searchKategori" class="border-2 border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition">
+        <option value="">📦 Semua Kategori</option>
+        <option value="Buah">🍎 Buah-buahan</option>
+        <option value="Sayur">🥬 Sayur-sayuran</option>
+      </select>
+      
+      <button onclick="searchProduk()" class="bg-green-600 hover:bg-green-700 text-white rounded-lg px-6 py-3 font-bold transition shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+        <i class="fa-solid fa-search"></i> Cari Sekarang
+      </button>
+    </div>
+  </div>
+
+  <!-- STATISTICS -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500 hover:shadow-xl transition">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-600 text-sm font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-warehouse text-green-600"></i>
+            Total Produk
+          </p>
+          <p class="text-4xl font-bold text-gray-800 mt-2" id="totalProduk">0</p>
+          <p class="text-xs text-gray-500 mt-1">produk tersedia</p>
+        </div>
+        <div class="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-xl flex items-center justify-center shadow-inner">
+          <i class="fa-solid fa-boxes-stacked text-green-600 text-3xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-red-500 hover:shadow-xl transition">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-600 text-sm font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-apple-whole text-red-600"></i>
+            Kategori Buah
+          </p>
+          <p class="text-4xl font-bold text-gray-800 mt-2" id="totalBuah">0</p>
+          <p class="text-xs text-gray-500 mt-1">jenis buah segar</p>
+        </div>
+        <div class="w-16 h-16 bg-gradient-to-br from-red-100 to-red-200 rounded-xl flex items-center justify-center shadow-inner">
+          <span class="text-4xl">🍎</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500 hover:shadow-xl transition">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-600 text-sm font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-leaf text-orange-600"></i>
+            Kategori Sayur
+          </p>
+          <p class="text-4xl font-bold text-gray-800 mt-2" id="totalSayur">0</p>
+          <p class="text-xs text-gray-500 mt-1">jenis sayur organik</p>
+        </div>
+        <div class="w-16 h-16 bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl flex items-center justify-center shadow-inner">
+          <span class="text-4xl">🥬</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER DAFTAR PRODUK -->
+  <div class="bg-white rounded-t-xl shadow-lg px-6 py-4 border-t-4 border-green-500">
+    <div class="flex items-center justify-between">
+      <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+        <i class="fa-solid fa-list text-green-600"></i>
+        Daftar Produk Tersedia
+      </h3>
+      <span class="bg-green-100 text-green-700 px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2">
+        <i class="fa-solid fa-box"></i>
+        <span id="countProduk">0</span> Produk
+      </span>
+    </div>
+  </div>
+
+  <!-- PRODUK LIST -->
+  <div class="bg-white rounded-b-xl shadow-lg p-6">
+    <ul id="list" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></ul>
+
+    <!-- EMPTY STATE -->
+    <div id="emptyState" class="hidden text-center py-16">
+      <div class="text-8xl mb-4">📦</div>
+      <i class="fa-solid fa-box-open text-gray-300 text-6xl mb-4 hidden"></i>
+      <h4 class="text-2xl font-bold text-gray-700 mb-2">Belum Ada Produk</h4>
+      <p class="text-gray-500 mb-6">Mulai tambahkan produk buah dan sayur segar Anda</p>
+      <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-bold transition shadow-md flex items-center gap-2 mx-auto">
+        <i class="fa-solid fa-plus"></i> Tambah Produk Pertama
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script src="../js/config.js"></script>
+<script>
+const token = localStorage.getItem("user_token");
+if (!token) location.href = "../login.html";
+
+/* LOAD PRODUK */
+function loadProduk() {
+  fetch(`${BASE_URL}/admin/produk`, { headers:{ Authorization:`Bearer ${token}` }})
+  .then(res=>res.json())
+  .then(data => {
+    renderProduk(data);
+    updateStats(data);
+  })
+  .catch(()=>alert("❌ Gagal memuat data produk"));
+}
+
+/* UPDATE STATISTICS */
+function updateStats(data) {
+  const totalBuah = data.filter(p => p.kategori === 'Buah').length;
+  const totalSayur = data.filter(p => p.kategori === 'Sayur').length;
+  
+  document.getElementById('totalProduk').textContent = data.length;
+  document.getElementById('totalBuah').textContent = totalBuah;
+  document.getElementById('totalSayur').textContent = totalSayur;
+}
+
+/* SEARCH PRODUK */
+function searchProduk() {
+  const nama = searchNama.value.trim();
+  const kategori = searchKategori.value;
+
+  if(!nama && !kategori){
+    loadProduk();
+    return;
+  }
+
+  let url = `${BASE_URL}/admin/produk/search?`;
+  if(nama) url += `nama=${encodeURIComponent(nama)}&`;
+  if(kategori) url += `kategori=${encodeURIComponent(kategori)}`;
+
+  fetch(url, { headers:{ Authorization:`Bearer ${token}` }})
+  .then(res=>res.json())
+  .then(data => {
+    renderProduk(data);
+    updateStats(data);
+  })
+  .catch(()=>alert("❌ Gagal mencari produk"));
+}
+
+/* RENDER PRODUK */
+function renderProduk(data){
+  const list = document.getElementById('list');
+  const emptyState = document.getElementById('emptyState');
+  const countProduk = document.getElementById('countProduk');
+  
+  countProduk.textContent = data.length;
+  
+  if(!data.length){
+    list.classList.add('hidden');
+    emptyState.classList.remove('hidden');
+    return;
+  }
+
+  list.classList.remove('hidden');
+  emptyState.classList.add('hidden');
+  
+  list.innerHTML = data.map(p=>`
+    <li class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-2 border-2 border-transparent hover:border-green-500">
+      <div class="relative">
+        <img src="${p.foto || 'https://via.placeholder.com/300x200?text=No+Image'}" 
+             class="w-full h-48 object-cover" referrerpolicy="no-referrer">
+        <div class="absolute top-3 right-3">
+          <span class="bg-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+            ${p.kategori === 'Buah' ? '<span>🍎</span> Buah' : '<span>🥬</span> Sayur'}
+          </span>
+        </div>
+        ${p.stok < 10 ? `
+          <div class="absolute top-3 left-3">
+            <span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+              <i class="fa-solid fa-exclamation-triangle"></i> Stok Menipis
+            </span>
+          </div>
+        ` : ''}
+      </div>
+      
+      <div class="p-5 bg-gradient-to-b from-white to-green-50">
+        <h4 class="font-bold text-lg text-gray-800 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-tag text-green-600"></i>
+          ${p.nama}
+        </h4>
+        
+        <div class="space-y-2.5 mb-4">
+          <div class="flex items-center justify-between bg-white rounded-lg p-2 shadow-sm">
+            <span class="text-sm text-gray-600 font-semibold flex items-center gap-2">
+              <i class="fa-solid fa-money-bill-wave text-green-600"></i> Harga
+            </span>
+            <span class="font-bold text-green-700">Rp ${parseInt(p.harga).toLocaleString('id-ID')}</span>
+          </div>
+          
+          <div class="flex items-center justify-between bg-white rounded-lg p-2 shadow-sm">
+            <span class="text-sm text-gray-600 font-semibold flex items-center gap-2">
+              <i class="fa-solid fa-box-open text-green-600"></i> Stok
+            </span>
+            <span class="font-bold ${p.stok < 10 ? 'text-red-600' : 'text-gray-800'}">
+              ${p.stok} unit
+            </span>
+          </div>
+        </div>
+        
+        <div class="flex gap-2">
+          <button onclick='edit(${JSON.stringify(p)})' 
+                  class="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-lg font-bold transition shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+            <i class="fa-solid fa-pen-to-square"></i> Edit
+          </button>
+          <button onclick='hapus(${p.id})' 
+                  class="bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-lg font-bold transition shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+      </div>
+    </li>
+  `).join("");
+}
+
+/* SIMPAN PRODUK */
+function simpan() {
+  const payload={
+    nama:nama.value.trim(),
+    kategori:kategori.value,
+    harga:harga.value,
+    stok:stok.value,
+    foto:foto.value.trim()
+  };
+  
+  if(!payload.nama || !payload.harga || !payload.stok){
+    alert("❌ Nama, harga, dan stok wajib diisi!");
+    return;
+  }
+  
+  if(payload.harga <= 0 || payload.stok < 0){
+    alert("❌ Harga harus lebih dari 0 dan stok tidak boleh negatif!");
+    return;
+  }
+  
+  const url = id.value ? `${BASE_URL}/admin/produk/${id.value}` : `${BASE_URL}/admin/produk`;
+  const method = id.value ? "PUT" : "POST";
+  
+  fetch(url,{
+    method: method,
+    headers:{
+      Authorization:`Bearer ${token}`,
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify(payload)
+  })
+  .then(res=>{
+    if(!res.ok) throw new Error();
+    alert(id.value ? "✅ Produk berhasil diupdate!" : "✅ Produk berhasil ditambahkan!");
+    resetForm();
+    loadProduk();
+  })
+  .catch(()=>alert("❌ Gagal menyimpan produk"));
+}
+
+/* EDIT PRODUK */
+function edit(p){
+  id.value = p.id;
+  nama.value = p.nama;
+  kategori.value = p.kategori;
+  harga.value = p.harga;
+  stok.value = p.stok;
+  foto.value = p.foto || '';
+  
+  // Update form title
+  document.getElementById('formTitle').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Edit Produk';
+  document.getElementById('btnText').textContent = 'Update Produk';
+  
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* HAPUS PRODUK */
+function hapus(idProduk){
+  if(!confirm("⚠️ Apakah Anda yakin ingin menghapus produk ini?\nTindakan ini tidak dapat dibatalkan!")) return;
+  
+  fetch(`${BASE_URL}/admin/produk/${idProduk}`,{
+    method:"DELETE",
+    headers:{Authorization:`Bearer ${token}`}
+  })
+  .then(res=>{
+    if(!res.ok) throw new Error();
+    alert("✅ Produk berhasil dihapus!");
+    loadProduk();
+  })
+  .catch(()=>alert("❌ Gagal menghapus produk"));
+}
+
+/* RESET FORM */
+function resetForm(){
+  id.value = "";
+  nama.value = "";
+  kategori.value = "Buah";
+  harga.value = "";
+  stok.value = "";
+  foto.value = "";
+  
+  // Reset form title
+  document.getElementById('formTitle').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Tambah Produk Baru';
+  document.getElementById('btnText').textContent = 'Simpan Produk';
+}
+
+/* BACK TO DASHBOARD */
+function back(){
+  location.href="dashboard.html";
+}
+
+// Load produk saat halaman dimuat
+loadProduk();
+
+// Enter key to search
+searchNama.addEventListener('keypress', (e) => {
+  if(e.key === 'Enter') searchProduk();
+});
+</script>
+</body>
+</html>
+
