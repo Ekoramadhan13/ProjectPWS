@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kelola API Key - Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  @keyframes slideIn {
+    from { transform: translateX(400px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(400px); opacity: 0; }
+  }
+  .toast-enter { animation: slideIn 0.3s ease-out; }
+  .toast-exit { animation: slideOut 0.3s ease-in; }
+</style>
+</head>
+<body class="bg-green-50">
+
+<!-- TOAST NOTIFICATION CONTAINER -->
+<div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-3 max-w-sm"></div>
+
+<!-- NAVBAR -->
+<nav class="bg-white shadow-lg sticky top-0 z-40 border-b-4 border-green-500">
+  <div class="max-w-7xl mx-auto px-6 py-4">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+          <i class="fa-solid fa-key text-2xl"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-xl text-gray-800 flex items-center gap-2">
+            <i class="fa-solid fa-shield-halved text-green-600"></i>
+            Kelola API Key
+          </h1>
+          <p class="text-xs text-gray-500 flex items-center gap-1">
+            <i class="fa-solid fa-lock text-green-600 text-xs"></i>
+            Manajemen Akses & Keamanan API
+          </p>
+        </div>
+      </div>
+      
+      <button onclick="back()" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-semibold transition shadow-md hover:shadow-lg flex items-center gap-2">
+        <i class="fa-solid fa-arrow-left"></i> Kembali ke Dashboard
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-7xl mx-auto px-6 py-8">
+
+  <!-- HEADER SECTION -->
+  <div class="mb-8 bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
+          <i class="fa-solid fa-key text-green-600"></i>
+          Manajemen API Key 
+        </h2>
+        <p class="text-gray-600 mt-2 flex items-center gap-2">
+          <i class="fa-solid fa-circle-info text-green-500"></i>
+          Kelola akses API untuk semua pengguna sistem
+        </p>
+      </div>
+      <div class="hidden md:block text-6xl">
+        🔐🌿
+      </div>
+    </div>
+  </div>
+
+    <!-- REFRESH BUTTON -->
+  <div class="flex justify-end mb-4 gap-2">
+    <button id="refreshBtn" 
+            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition shadow-md">
+      <i class="fa-solid fa-arrows-rotate"></i> Refresh
+    </button>
+  </div>
+
+  <!-- STATISTICS -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500 hover:shadow-xl transition">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-600 text-sm font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-key text-green-600"></i>
+            Total API Keys
+          </p>
+          <p class="text-4xl font-bold text-gray-800 mt-2" id="totalKeys">0</p>
+          <p class="text-xs text-gray-500 mt-1">keys terdaftar</p>
+        </div>
+        <div class="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-xl flex items-center justify-center shadow-inner">
+          <i class="fa-solid fa-key text-green-600 text-3xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500 hover:shadow-xl transition">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-600 text-sm font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-check-circle text-blue-600"></i>
+            Keys Aktif
+          </p>
+          <p class="text-4xl font-bold text-gray-800 mt-2" id="activeKeys">0</p>
+          <p class="text-xs text-gray-500 mt-1">sedang aktif</p>
+        </div>
+        <div class="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center shadow-inner">
+          <i class="fa-solid fa-power-off text-blue-600 text-3xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500 hover:shadow-xl transition">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-600 text-sm font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-users text-orange-600"></i>
+            Total Users
+          </p>
+          <p class="text-4xl font-bold text-gray-800 mt-2" id="totalUsers">0</p>
+          <p class="text-xs text-gray-500 mt-1">pengguna sistem</p>
+        </div>
+        <div class="w-16 h-16 bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl flex items-center justify-center shadow-inner">
+          <i class="fa-solid fa-user-group text-orange-600 text-3xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500 hover:shadow-xl transition">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-600 text-sm font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-chart-line text-purple-600"></i>
+            Total Request
+          </p>
+          <p class="text-4xl font-bold text-gray-800 mt-2" id="totalRequests">0</p>
+          <p class="text-xs text-gray-500 mt-1">hari ini</p>
+        </div>
+        <div class="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl flex items-center justify-center shadow-inner">
+          <i class="fa-solid fa-bolt text-purple-600 text-3xl"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLE SECTION -->
+  <div class="bg-white rounded-xl shadow-lg overflow-hidden border-t-4 border-green-500">
+    <!-- Table Header -->
+    <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4">
+      <h3 class="text-white font-bold text-lg flex items-center gap-2">
+        <i class="fa-solid fa-table-list"></i>
+        Daftar API Key Terdaftar
+      </h3>
+      <p class="text-green-100 text-sm mt-1">Monitor dan kelola semua API key dalam sistem</p>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+              <i class="fa-solid fa-user mr-2 text-green-600"></i>Nama User
+            </th>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+              <i class="fa-solid fa-key mr-2 text-green-600"></i>API Key
+            </th>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+              <i class="fa-solid fa-signal mr-2 text-green-600"></i>Status
+            </th>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+              <i class="fa-solid fa-gauge mr-2 text-green-600"></i>Limit Harian
+            </th>
+            <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+              <i class="fa-solid fa-sliders mr-2 text-green-600"></i>Aksi
+            </th>
+          </tr>
+        </thead>
+        <tbody id="list" class="divide-y divide-gray-200">
+          <!-- Data will be loaded here -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-16 px-6">
+      <div class="text-8xl mb-4">🔐</div>
+      <h4 class="text-2xl font-bold text-gray-700 mb-2">Belum Ada API Key</h4>
+      <p class="text-gray-500">API key akan muncul di sini setelah user mendaftar</p>
+    </div>
+
+    <!-- Table Footer -->
+    <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+      <div class="flex items-center justify-between">
+        <p class="text-sm text-gray-600">
+          Menampilkan <span class="font-bold text-gray-800" id="showingCount">0</span> dari <span class="font-bold text-gray-800" id="totalCount">0</span> API keys
+        </p>
+        <p class="text-xs text-gray-500 flex items-center gap-1">
+          <i class="fa-solid fa-clock"></i>
+          Terakhir diperbarui: <span id="lastUpdate">-</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL STATISTIK -->
+<div id="modalStatistik" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-xl shadow-2xl max-w-md w-full transform transition-all">
+    <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4 rounded-t-xl">
+      <h3 class="text-white font-bold text-lg flex items-center gap-2">
+        <i class="fa-solid fa-chart-bar"></i>
+        Statistik API Key
+      </h3>
+    </div>
+    <div id="modalContent" class="p-6">
+      <!-- Content will be loaded here -->
+    </div>
+    <div class="px-6 pb-6">
+      <button onclick="closeModal()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-lg font-semibold transition">
+        <i class="fa-solid fa-times mr-2"></i>Tutup
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/config.js"></script>
+<script>
+  async function safeFetch(url, options = {}) {
+  const res = await fetch(url, options);
+
+  // ❗ JANGAN auto-logout admin
+  if (res.status === 401) {
+    showToast('Token tidak valid / expired', 'error');
+    throw new Error('Unauthorized');
+  }
+
+  if (res.status === 403) {
+    showToast('Akses ditolak (khusus admin)', 'error');
+    throw new Error('Forbidden');
+  }
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || 'Server error');
+  }
+
+  return res;
+}
+
+
+const token = localStorage.getItem("user_token");
+const role  = localStorage.getItem("role");
+
+if (!token || role !== "admin") {
+  alert("Akses ditolak! Halaman khusus admin.");
+  window.location.href = "../login.html";
+}
+
+ // Tombol refresh
+  document.getElementById('refreshBtn').addEventListener('click', async () => {
+    await loadApiKey();
+    showToast('Data API Key diperbarui', 'success');
+  });
+
+/* ========== TOAST NOTIFICATION SYSTEM ========== */
+function showToast(message, type = 'success') {
+  const toastContainer = document.getElementById('toastContainer');
+  
+  const icons = {
+    success: '<i class="fa-solid fa-circle-check text-2xl"></i>',
+    error: '<i class="fa-solid fa-circle-xmark text-2xl"></i>',
+    warning: '<i class="fa-solid fa-triangle-exclamation text-2xl"></i>',
+    info: '<i class="fa-solid fa-circle-info text-2xl"></i>'
+  };
+  
+  const colors = {
+    success: 'from-green-500 to-green-600',
+    error: 'from-red-500 to-red-600',
+    warning: 'from-yellow-500 to-yellow-600',
+    info: 'from-blue-500 to-blue-600'
+  };
+  
+  const toast = document.createElement('div');
+  toast.className = `toast-enter bg-white rounded-lg shadow-2xl overflow-hidden transform transition-all duration-300`;
+  toast.innerHTML = `
+    <div class="flex items-center gap-4 p-4">
+      <div class="w-12 h-12 bg-gradient-to-br ${colors[type]} rounded-lg flex items-center justify-center text-white flex-shrink-0">
+        ${icons[type]}
+      </div>
+      <div class="flex-1">
+        <p class="font-semibold text-gray-800 text-sm">${message}</p>
+      </div>
+      <button onclick="this.parentElement.parentElement.remove()" class="text-gray-400 hover:text-gray-600 transition">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+    </div>
+    <div class="h-1 bg-gradient-to-r ${colors[type]}"></div>
+  `;
+  
+  toastContainer.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.classList.add('toast-exit');
+    setTimeout(() => toast.remove(), 300);
+  }, 4000);
+}
+
+/* ========== UPDATE TIME ========== */
+function updateTime() {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('id-ID');
+  document.getElementById('lastUpdate').textContent = timeStr;
+}
+
+/* ========== LOAD API KEY ========== */
+async function loadApiKey(){
+  try {
+    const res = await safeFetch(`${BASE_URL}/admin/apikeys`, {
+      headers:{ Authorization:`Bearer ${token}` }
+    });
+
+    const data = await res.json();
+    updateStats(data);
+    renderTable(data);
+    updateTime();
+
+  } catch (err) {
+    console.error(err);
+    showToast('Gagal memuat data API Key', 'error');
+  }
+}
+
+/* ========== UPDATE STATISTICS ========== */
+function updateStats(data) {
+  const activeKeys = data.filter(k => k.status === 'aktif').length;
+  const totalUsers = new Set(data.map(k => k.nama)).size;
+  const totalRequests = data.reduce((sum, k) => sum + k.used_daily, 0);
+  
+  document.getElementById('totalKeys').textContent = data.length;
+  document.getElementById('activeKeys').textContent = activeKeys;
+  document.getElementById('totalUsers').textContent = totalUsers;
+  document.getElementById('totalRequests').textContent = totalRequests.toLocaleString();
+}
+
+/* ========== RENDER TABLE ========== */
+function renderTable(data) {
+  const list = document.getElementById('list');
+  const emptyState = document.getElementById('emptyState');
+  
+  document.getElementById('showingCount').textContent = data.length;
+  document.getElementById('totalCount').textContent = data.length;
+  
+  if(data.length === 0){
+    list.innerHTML = '';
+    emptyState.classList.remove('hidden');
+    return;
+  }
+  
+  emptyState.classList.add('hidden');
+  
+  list.innerHTML = data.map(k=>`
+    <tr class="hover:bg-green-50 transition">
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white font-bold">
+            ${k.nama.charAt(0).toUpperCase()}
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800">${k.nama}</p>
+            <p class="text-xs text-gray-500">ID: ${k.id}</p>
+          </div>
+        </div>
+      </td>
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-2">
+          <code class="bg-gray-100 px-3 py-1 rounded-lg font-mono text-sm text-gray-700">${k.api_key.substring(0, 20)}...</code>
+          <button onclick="copyApiKey('${k.api_key}')" class="text-gray-400 hover:text-green-600 transition" title="Copy API Key">
+            <i class="fa-solid fa-copy"></i>
+          </button>
+        </div>
+      </td>
+      <td class="px-6 py-4">
+        ${k.status === 'aktif'
+          ? '<span class="inline-flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold"><i class="fa-solid fa-check-circle"></i> Aktif</span>'
+          : '<span class="inline-flex items-center gap-1 bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold"><i class="fa-solid fa-times-circle"></i> Nonaktif</span>'}
+      </td>
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-2">
+          <input type="number" value="${k.limit_daily}" id="limit${k.id}" 
+                 class="border-2 border-gray-300 rounded-lg px-3 py-2 text-sm w-24 focus:ring-2 focus:ring-green-500 focus:border-green-500">
+          <button onclick="updateLimit(${k.id})" 
+                  class="bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-lg text-sm font-semibold transition shadow-md flex items-center gap-1">
+            <i class="fa-solid fa-check"></i> Set
+          </button>
+        </div>
+        <p class="text-xs text-gray-500 mt-1">Digunakan: ${k.used_daily}/${k.limit_daily}</p>
+      </td>
+      <td class="px-6 py-4">
+        <div class="flex gap-2">
+          ${k.status === 'aktif'
+            ? `<button onclick="nonaktif(${k.id})" 
+                       class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg font-semibold transition shadow-md flex items-center gap-2 text-sm">
+                <i class="fa-solid fa-ban"></i> Nonaktif
+               </button>`
+            : `<button onclick="aktif(${k.id})" 
+                       class="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg font-semibold transition shadow-md flex items-center gap-2 text-sm">
+                <i class="fa-solid fa-power-off"></i> Aktifkan
+               </button>`}
+          <button onclick="statistik(${k.id})" 
+                  class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg font-semibold transition shadow-md flex items-center gap-2 text-sm">
+            <i class="fa-solid fa-chart-bar"></i> Info
+          </button>
+        </div>
+      </td>
+    </tr>
+  `).join("");
+}
+
+/* ========== COPY API KEY ========== */
+function copyApiKey(apiKey) {
+  navigator.clipboard.writeText(apiKey).then(() => {
+    showToast('API Key berhasil disalin!', 'success');
+  }).catch(() => {
+    showToast('Gagal menyalin API Key', 'error');
+  });
+}
+
+/* ========== NONAKTIFKAN API KEY ========== */
+function nonaktif(id){
+  if(!confirm("⚠️ Apakah yakin ingin menonaktifkan API Key ini?\nUser tidak akan bisa mengakses API!")) return;
+  
+  safeFetch(`${BASE_URL}/admin/apikeys/${id}/nonaktif`, { 
+    method:"PUT", 
+    headers:{ Authorization:`Bearer ${token}` } 
+  })
+  .then(res=>{
+    if(!res.ok) throw new Error(); 
+    showToast('API Key berhasil dinonaktifkan!', 'success');
+    loadApiKey();
+  })
+  .catch(()=>showToast('Gagal menonaktifkan API Key', 'error'));
+}
+
+/* ========== AKTIFKAN API KEY ========== */
+async function updateLimit(id){
+  const limit = document.getElementById(`limit${id}`).value;
+
+  if(limit < 0){
+    showToast('Limit tidak boleh negatif!', 'warning');
+    return;
+  }
+
+  try {
+    const res = await safeFetch(`${BASE_URL}/admin/apikeys/${id}/limit`, {
+      method: "PUT",
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ limit_daily: Number(limit) })
+    });
+
+    showToast('Limit berhasil diupdate!', 'success');
+    loadApiKey();
+
+  } catch (err) {
+    console.warn('Update limit gagal (endpoint belum ada?)');
+    showToast('Endpoint limit belum tersedia di server', 'warning');
+  }
+}
+
+
+/* ========== STATISTIK ========== */
+function statistik(id){
+  safeFetch(`${BASE_URL}/admin/apikeys/${id}/statistik`, { 
+    headers:{ Authorization:`Bearer ${token}` } 
+  })
+  .then(res=>res.json())
+  .then(data=>{
+    const modal = document.getElementById('modalStatistik');
+    const content = document.getElementById('modalContent');
+    
+    content.innerHTML = `
+      <div class="space-y-4">
+        <div class="bg-gray-50 rounded-lg p-4">
+          <p class="text-sm text-gray-600 mb-1 flex items-center gap-2">
+            <i class="fa-solid fa-key text-green-600"></i> API Key
+          </p>
+          <code class="text-sm font-mono text-gray-800 break-all">${data.api_key}</code>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-500">
+            <p class="text-xs text-gray-600 mb-1 flex items-center gap-1">
+              <i class="fa-solid fa-gauge"></i> Limit Harian
+            </p>
+            <p class="text-2xl font-bold text-gray-800">${data.limit_daily}</p>
+          </div>
+          
+          <div class="bg-orange-50 rounded-lg p-4 border-l-4 border-orange-500">
+            <p class="text-xs text-gray-600 mb-1 flex items-center gap-1">
+              <i class="fa-solid fa-chart-line"></i> Terpakai
+            </p>
+            <p class="text-2xl font-bold text-gray-800">${data.used_daily}</p>
+          </div>
+        </div>
+        
+        <div class="bg-purple-50 rounded-lg p-4 border-l-4 border-purple-500">
+          <p class="text-sm text-gray-600 mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-clock"></i> Terakhir Digunakan
+          </p>
+          <p class="text-gray-800 font-semibold">${data.last_used || 'Belum pernah digunakan'}</p>
+        </div>
+        
+        <div class="bg-green-50 rounded-lg p-4">
+          <p class="text-sm text-gray-600 mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-percent"></i> Penggunaan
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="flex-1 bg-gray-200 rounded-full h-3">
+              <div class="h-3 rounded-full bg-gradient-to-r from-green-500 to-green-600" 
+                   style="width: ${Math.min((data.used_daily / data.limit_daily) * 100, 100)}%"></div>
+            </div>
+            <span class="text-sm font-bold text-gray-800">
+              ${Math.round((data.used_daily / data.limit_daily) * 100)}%
+            </span>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    modal.classList.remove('hidden');
+  })
+  .catch(()=>showToast('Gagal mengambil statistik', 'error'));
+}
+
+/* ========== CLOSE MODAL ========== */
+function closeModal() {
+  document.getElementById('modalStatistik').classList.add('hidden');
+}
+
+/* ========== BACK TO DASHBOARD ========== */
+function back(){
+  location.href="dashboard.html";
+}
+
+// Load data
+loadApiKey();
+
+// Update time every second
+setInterval(updateTime, 1000);
+
+// Close modal on click outside
+document.getElementById('modalStatistik').addEventListener('click', (e) => {
+  if(e.target.id === 'modalStatistik') closeModal();
+});
+</script>
+</body>
+</html>
