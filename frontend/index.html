@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Buah & Sayur API</title>
+  <link rel="icon" href="data:,">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(3deg); }
+    }
+    @keyframes slide-up {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+    .slide-up {
+      animation: slide-up 0.6s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden
+             bg-gradient-to-br from-emerald-400 via-green-400 to-lime-300">
+
+  <!-- Decorative Background Elements - Reduced -->
+  <div class="absolute top-10 left-10 text-6xl opacity-15 float-animation">🥬</div>
+  <div class="absolute top-20 right-20 text-5xl opacity-15 float-animation" style="animation-delay: 0.5s">🥕</div>
+  <div class="absolute bottom-20 left-20 text-6xl opacity-15 float-animation" style="animation-delay: 1s">🍅</div>
+  <div class="absolute bottom-10 right-10 text-5xl opacity-15 float-animation" style="animation-delay: 1.5s">🥦</div>
+
+  <div class="bg-white/95 backdrop-blur-sm w-full max-w-md p-8 rounded-3xl shadow-2xl 
+              border-4 border-white relative z-10 slide-up">
+
+    <!-- Main Icon -->
+    <div class="bg-gradient-to-br from-green-500 to-emerald-600 
+                w-20 h-20 mx-auto rounded-full flex items-center justify-center 
+                shadow-xl mb-6 transform hover:scale-110 transition-transform duration-300">
+      <i class="fa-solid fa-apple-whole text-white text-4xl"></i>
+    </div>
+
+    <!-- Title Section -->
+    <h1 class="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-green-600 to-emerald-600 
+               bg-clip-text text-transparent">
+      Buah & Sayur API
+    </h1>
+
+    <p class="text-gray-600 text-center mb-6 text-sm">
+      Platform API untuk data produk buah & sayur segar 🌱
+    </p>
+
+    <!-- Features Icons -->
+    <div class="grid grid-cols-3 gap-3 mb-6">
+      <div class="text-center p-3 bg-green-50 rounded-xl hover:bg-green-100 transition-all">
+        <i class="fa-solid fa-key text-green-500 text-xl mb-1"></i>
+        <p class="text-xs text-gray-700 font-semibold">API Key</p>
+      </div>
+      <div class="text-center p-3 bg-emerald-50 rounded-xl hover:bg-emerald-100 transition-all">
+        <i class="fa-solid fa-database text-emerald-500 text-xl mb-1"></i>
+        <p class="text-xs text-gray-700 font-semibold">Data Lengkap</p>
+      </div>
+      <div class="text-center p-3 bg-lime-50 rounded-xl hover:bg-lime-100 transition-all">
+        <i class="fa-solid fa-bolt text-lime-600 text-xl mb-1"></i>
+        <p class="text-xs text-gray-700 font-semibold">Fast & Secure</p>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="space-y-3 mb-6">
+      <!-- Login Button -->
+      <a href="login.html" class="block group">
+        <button
+          class="w-full py-3.5 rounded-2xl font-bold text-green-600
+                 bg-gradient-to-r from-green-50 to-emerald-50
+                 hover:from-green-100 hover:to-emerald-100
+                 border-2 border-green-200 hover:border-green-300
+                 transition-all duration-300 hover:shadow-lg
+                 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          <span>Masuk ke Akun</span>
+          <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+        </button>
+      </a>
+
+      <!-- Register Button -->
+      <a href="register.html" class="block group">
+        <button
+          class="w-full py-3.5 rounded-2xl font-bold text-white
+                 bg-gradient-to-r from-green-500 via-emerald-500 to-green-600
+                 hover:shadow-xl hover:shadow-green-300/50 
+                 transition-all duration-300
+                 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-user-plus"></i>
+          <span>Daftar Gratis</span>
+          <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+        </button>
+      </a>
+    </div>
+
+    <!-- Stats -->
+    <div class="bg-gradient-to-r from-green-500 to-emerald-600 
+                rounded-2xl p-4 text-white shadow-lg">
+      <div class="grid grid-cols-3 gap-3 text-center">
+        <div>
+          <p class="text-xl font-bold">500+</p>
+          <p class="text-xs opacity-90">Produk</p>
+        </div>
+        <div>
+          <p class="text-xl font-bold">1K+</p>
+          <p class="text-xs opacity-90">Users</p>
+        </div>
+        <div>
+          <p class="text-xl font-bold">99.9%</p>
+          <p class="text-xs opacity-90">Uptime</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <p class="text-center text-xs text-gray-500 mt-6 flex items-center justify-center gap-2">
+      <i class="fa-solid fa-heart text-red-400"></i>
+      Made with love for healthy living
+    </p>
+
+  </div>
+
+</body>
+</html>
