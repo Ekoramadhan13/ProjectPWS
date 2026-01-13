@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Halaman Produk</title>
+  <link rel="icon" href="data:,">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .transition-fast { transition: all 0.3s ease; }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(34,197,94,0.15); }
+    .btn-hover:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(34,197,94,0.2); }
+    .floating-icon {
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 font-sans">
+
+<!-- NAVBAR -->
+<nav class="bg-gradient-to-r from-green-600 to-green-700 text-white px-8 py-5 shadow-2xl">
+  <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <h1 class="font-bold text-2xl flex items-center gap-3">
+      <div class="bg-white/20 p-2 rounded-xl floating-icon">
+        <i class="fa-solid fa-shopping-basket text-green-200"></i>
+      </div>
+      <span>Katalog Produk</span>
+      <i class="fa-solid fa-leaf text-green-300 text-lg"></i>
+    </h1>
+    <div class="flex items-center gap-3">
+      <button onclick="refreshPage()" class="bg-white/20 hover:bg-white/30 px-5 py-2 rounded-xl text-sm font-semibold btn-hover shadow-lg flex items-center gap-2 backdrop-blur" title="Refresh Halaman">
+        <i class="fa-solid fa-rotate"></i> Refresh
+      </button>
+      <a href="dashboard.html" class="bg-white/20 hover:bg-white/30 px-5 py-2 rounded-xl text-sm font-semibold btn-hover shadow-lg flex items-center gap-2 backdrop-blur">
+        <i class="fa-solid fa-arrow-left"></i> Kembali
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="max-w-7xl mx-auto p-6 space-y-6">
+
+  <!-- HERO SECTION -->
+  <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-3xl shadow-2xl p-8 text-white relative overflow-hidden">
+    <div class="absolute top-0 right-0 opacity-10">
+      <i class="fa-solid fa-apple-whole text-9xl"></i>
+    </div>
+    <div class="absolute bottom-0 left-0 opacity-10">
+      <i class="fa-solid fa-carrot text-7xl"></i>
+    </div>
+    <div class="relative z-10">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="bg-white/20 p-3 rounded-2xl">
+          <i class="fa-solid fa-store text-3xl"></i>
+        </div>
+        <div>
+          <h2 class="text-3xl font-bold">Katalog Produk Segar</h2>
+          <p class="text-green-100">Jelajahi produk buah & sayur pilihan terbaik kami</p>
+        </div>
+      </div>
+      <div class="mt-6 flex gap-3 flex-wrap">
+        <div class="bg-white/20 backdrop-blur px-4 py-2 rounded-lg text-sm flex items-center gap-2">
+          <i class="fa-solid fa-leaf"></i>
+          <span>100% Fresh</span>
+        </div>
+        <div class="bg-white/20 backdrop-blur px-4 py-2 rounded-lg text-sm flex items-center gap-2">
+          <i class="fa-solid fa-certificate"></i>
+          <span>Organic Quality</span>
+        </div>
+        <div class="bg-white/20 backdrop-blur px-4 py-2 rounded-lg text-sm flex items-center gap-2">
+          <i class="fa-solid fa-truck-fast"></i>
+          <span>Daily Updated</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- API KEY INPUT FORM -->
+  <div class="bg-white rounded-2xl shadow-xl p-6 border-2 border-green-200">
+    <div class="flex items-center gap-3 mb-5">
+      <div class="bg-green-100 p-3 rounded-xl">
+        <i class="fa-solid fa-key text-green-600 text-xl"></i>
+      </div>
+      <div>
+        <h3 class="text-xl font-bold text-gray-800">Masukkan API Key Anda</h3>
+        <p class="text-sm text-gray-500">Paste API Key untuk mengakses data produk</p>
+      </div>
+    </div>
+    
+    <div class="grid md:grid-cols-4 gap-4">
+      <div class="md:col-span-3 relative">
+        <i class="fa-solid fa-key absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+        <input id="apikeyInput" type="text" placeholder="Paste API Key Anda di sini..." 
+          class="w-full pl-12 pr-4 py-3 border-2 border-green-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all font-mono text-sm">
+      </div>
+      
+      <button onclick="setApiKey()" 
+        class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 px-6 py-3 font-bold btn-hover shadow-lg flex items-center justify-center gap-2">
+        <i class="fa-solid fa-check-circle"></i> Set API Key
+      </button>
+    </div>
+
+    <div id="apiKeyStatus" class="mt-4 hidden">
+      <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-lg flex items-center gap-3">
+        <i class="fa-solid fa-circle-check text-green-600 text-xl"></i>
+        <div>
+          <p class="font-semibold text-green-800">API Key Aktif</p>
+          <p class="text-sm text-green-600 font-mono" id="displayApiKey"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- API KEY INFO -->
+  <div class="bg-white rounded-2xl shadow-xl p-6 border-2 border-green-200">
+    <div class="flex items-center justify-between flex-wrap gap-4">
+      <div class="flex items-center gap-3">
+        <div class="bg-green-100 p-3 rounded-xl">
+          <i class="fa-solid fa-chart-line text-green-600 text-xl"></i>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">Status API Key</p>
+          <p class="font-semibold text-gray-700" id="statusText">Belum diset</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="text-right">
+          <p class="text-sm text-gray-500">Kuota Tersisa</p>
+          <p class="text-lg font-bold text-green-600" id="quota">-</p>
+        </div>
+        <div class="text-right">
+          <p class="text-sm text-gray-500">Terakhir Digunakan</p>
+          <p class="text-sm font-semibold text-green-600" id="lastUsed">-</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH BAR -->
+  <div class="bg-white rounded-2xl shadow-xl p-6 border-2 border-green-200">
+    <div class="flex items-center gap-3 mb-5">
+      <div class="bg-green-100 p-3 rounded-xl">
+        <i class="fa-solid fa-magnifying-glass text-green-600 text-xl"></i>
+      </div>
+      <h3 class="text-xl font-bold text-gray-800">Cari Produk</h3>
+    </div>
+    
+    <div class="grid md:grid-cols-3 gap-4 mb-4">
+      <div class="relative">
+        <i class="fa-solid fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+        <input id="searchNama" placeholder="Cari nama produk..." 
+          class="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all">
+      </div>
+      
+      <div class="relative">
+        <i class="fa-solid fa-filter absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+        <select id="searchKategori" 
+          class="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-green-400 focus:border-green-400 appearance-none bg-white transition-all">
+          <option value="">Semua Kategori</option>
+          <option value="Buah">🍎 Buah</option>
+          <option value="Sayur">🥬 Sayur</option>
+        </select>
+      </div>
+      
+      <button onclick="searchProduk()" 
+        class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 px-6 py-3 font-bold btn-hover shadow-lg flex items-center justify-center gap-2">
+        <i class="fa-solid fa-magnifying-glass"></i> Cari Produk
+      </button>
+    </div>
+
+    <button onclick="loadProduk()" 
+      class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 px-6 py-3 font-bold btn-hover shadow-lg flex items-center justify-center gap-2">
+      <i class="fa-solid fa-box-open"></i> Tampilkan Semua Produk
+    </button>
+  </div>
+
+  <!-- PRODUK LIST -->
+  <div class="bg-white rounded-2xl shadow-xl p-8 border-2 border-green-200">
+    <div class="flex items-center justify-between mb-6 flex-wrap gap-4">
+      <h2 class="text-2xl font-bold flex items-center gap-3">
+        <div class="bg-green-100 p-3 rounded-xl">
+          <i class="fa-solid fa-box-open text-green-600 text-2xl"></i>
+        </div>
+        <span class="gradient-text">Data Produk</span>
+      </h2>
+      <div class="flex gap-2">
+        <div class="bg-green-50 px-4 py-2 rounded-lg flex items-center gap-2">
+          <i class="fa-solid fa-apple-whole text-green-600"></i>
+          <span class="text-sm font-semibold text-green-700">Fresh</span>
+        </div>
+        <div class="bg-green-50 px-4 py-2 rounded-lg flex items-center gap-2">
+          <i class="fa-solid fa-carrot text-green-600"></i>
+          <span class="text-sm font-semibold text-green-700">Organic</span>
+        </div>
+      </div>
+    </div>
+    
+    <ul id="produk" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <li class="col-span-full text-center py-16">
+        <div class="inline-block bg-green-50 rounded-2xl p-8">
+          <i class="fa-solid fa-box-open text-6xl text-green-300 mb-4"></i>
+          <p class="text-gray-500 font-semibold">Klik "Tampilkan Semua Produk" untuk melihat data</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- FOOTER STATS -->
+  <div class="grid md:grid-cols-3 gap-5">
+    <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border-2 border-green-200">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="bg-green-500 text-white p-3 rounded-xl">
+          <i class="fa-solid fa-seedling text-xl"></i>
+        </div>
+        <h4 class="font-bold text-gray-800">Kualitas Premium</h4>
+      </div>
+      <p class="text-sm text-gray-600">Semua produk dipilih dengan standar kualitas terbaik dan tersertifikasi organik</p>
+    </div>
+    
+    <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border-2 border-green-200">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="bg-green-500 text-white p-3 rounded-xl">
+          <i class="fa-solid fa-clock-rotate-left text-xl"></i>
+        </div>
+        <h4 class="font-bold text-gray-800">Update Harian</h4>
+      </div>
+      <p class="text-sm text-gray-600">Data stok dan harga diperbarui setiap hari untuk informasi yang akurat</p>
+    </div>
+    
+    <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border-2 border-green-200">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="bg-green-500 text-white p-3 rounded-xl">
+          <i class="fa-solid fa-hand-holding-heart text-xl"></i>
+        </div>
+        <h4 class="font-bold text-gray-800">Terpercaya</h4>
+      </div>
+      <p class="text-sm text-gray-600">Ribuan pengguna mempercayai kami untuk kebutuhan data produk mereka</p>
+    </div>
+  </div>
+
+</div>
+
+<script src="../js/config.js"></script>
+<script>
+const token = localStorage.getItem("user_token");
+const quotaSpan = document.getElementById("quota");
+const lastUsedSpan = document.getElementById("lastUsed");
+const produkList = document.getElementById("produk");
+const statusText = document.getElementById("statusText");
+
+let currentApiKey = "";
+
+if (!token || localStorage.getItem("role") !== "user") {
+  location.href = "../login.html";
+}
+
+/* =========================
+   SET API KEY DARI INPUT
+   ========================= */
+function setApiKey() {
+  const input = document.getElementById("apikeyInput").value.trim();
+  
+  if (!input) {
+    alert("❌ Mohon masukkan API Key terlebih dahulu");
+    return;
+  }
+  
+  currentApiKey = input;
+  document.getElementById("displayApiKey").innerText = input;
+  document.getElementById("apiKeyStatus").classList.remove("hidden");
+  statusText.innerText = "API Key telah diset";
+  statusText.classList.add("text-green-600", "font-semibold");
+  
+  // Coba load info API key
+  loadApiKeyInfo();
+}
+
+/* =========================
+   LOAD INFO API KEY
+   ========================= */
+async function loadApiKeyInfo() {
+  if (!currentApiKey) return;
+  
+  try {
+    const res = await fetch(`${BASE_URL}/user/apikey`, {
+      headers: { 
+        Authorization: `Bearer ${token}`,
+        "x-api-key": currentApiKey 
+      }
+    });
+
+    if (!res.ok) {
+      quotaSpan.innerText = "-";
+      lastUsedSpan.innerText = "-";
+      statusText.innerText = "API Key tidak valid";
+      statusText.classList.remove("text-green-600");
+      statusText.classList.add("text-red-600");
+      return;
+    }
+
+    const d = await res.json();
+    
+    // CEK STATUS API KEY
+    if (d.status === 'nonaktif') {
+      alert("⚠️ API Key Anda telah dinonaktifkan oleh Admin!\nSilakan hubungi administrator.");
+      statusText.innerText = "API Key Nonaktif";
+      statusText.classList.remove("text-green-600");
+      statusText.classList.add("text-red-600");
+      quotaSpan.innerText = "Nonaktif";
+      lastUsedSpan.innerText = "-";
+      document.getElementById("apiKeyStatus").classList.add("hidden");
+      currentApiKey = "";
+      return;
+    }
+    
+    quotaSpan.innerText = `${d.limit_daily - d.used_daily} / ${d.limit_daily}`;
+    lastUsedSpan.innerText = d.last_used || "-";
+
+  } catch (err) {
+    console.log("Tidak dapat memuat info API Key");
+  }
+}
+
+/* =================
+   VALIDASI API KEY
+   ================= */
+function cekApiKey() {
+  if (!currentApiKey) {
+    alert("❌ Mohon set API Key terlebih dahulu");
+    return false;
+  }
+  return true;
+}
+
+/* ==========
+   LOAD PRODUK
+   ========== */
+async function loadProduk() {
+  if (!cekApiKey()) return;
+
+  try {
+    const res = await fetch(`${BASE_URL}/api/produk`, {
+      headers: { "x-api-key": currentApiKey }
+    });
+
+    if (res.status === 403) {
+      alert("⚠️ API Key Anda telah dinonaktifkan oleh Admin atau kuota habis!\nSilakan hubungi administrator.");
+      statusText.innerText = "API Key Nonaktif";
+      statusText.classList.remove("text-green-600");
+      statusText.classList.add("text-red-600");
+      document.getElementById("apiKeyStatus").classList.add("hidden");
+      currentApiKey = "";
+      return;
+    }
+
+    if (!res.ok) throw new Error("API Key tidak valid / kuota habis");
+
+    const data = await res.json();
+    renderProduk(data);
+    loadApiKeyInfo(); // update kuota terbaru
+
+  } catch (e) {
+    alert(`❌ ${e.message}`);
+  }
+}
+
+/* ==========
+   SEARCH PRODUK
+   ========== */
+async function searchProduk() {
+  if (!cekApiKey()) return;
+
+  const nama = document.getElementById("searchNama").value;
+  const kategori = document.getElementById("searchKategori").value;
+
+  let url = `${BASE_URL}/api/produk/search?`;
+  if (nama) url += `nama=${encodeURIComponent(nama)}&`;
+  if (kategori) url += `kategori=${encodeURIComponent(kategori)}`;
+
+  try {
+    const res = await fetch(url, {
+      headers: { "x-api-key": currentApiKey }
+    });
+
+    if (res.status === 403) {
+      alert("⚠️ API Key Anda telah dinonaktifkan oleh Admin atau kuota habis!\nSilakan hubungi administrator.");
+      statusText.innerText = "API Key Nonaktif";
+      statusText.classList.remove("text-green-600");
+      statusText.classList.add("text-red-600");
+      document.getElementById("apiKeyStatus").classList.add("hidden");
+      currentApiKey = "";
+      return;
+    }
+
+    if (!res.ok) throw new Error("API Key tidak valid / kuota habis");
+
+    const data = await res.json();
+    renderProduk(data);
+    loadApiKeyInfo();
+
+  } catch (e) {
+    alert(`❌ ${e.message}`);
+  }
+}
+
+/* ==========
+   REFRESH PAGE
+   ========== */
+function refreshPage() {
+  location.reload();
+}
+
+/* ==========
+   RENDER PRODUK
+   ========== */
+function renderProduk(data) {
+  if (!data.length) {
+    produkList.innerHTML =
+      `<li class="col-span-full text-center py-16">
+        <div class="inline-block bg-gray-50 rounded-2xl p-8">
+          <i class="fa-solid fa-box-open text-6xl text-gray-300 mb-4"></i>
+          <p class="text-gray-500 font-semibold">Produk tidak ditemukan</p>
+          <p class="text-sm text-gray-400 mt-2">Coba kata kunci lain atau lihat semua produk</p>
+        </div>
+      </li>`;
+    return;
+  }
+
+  produkList.innerHTML = data.map(p => `
+    <li class="bg-white border-2 border-green-100 rounded-2xl overflow-hidden card transition-fast hover:border-green-400">
+      <div class="relative">
+        <img src="${p.foto}" class="w-full h-48 object-cover"
+             onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+        <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1 rounded-lg shadow">
+          <span class="text-xs font-bold ${p.kategori === 'Buah' ? 'text-red-600' : 'text-green-600'}">
+            ${p.kategori === 'Buah' ? '🍎' : '🥬'} ${p.kategori}
+          </span>
+        </div>
+        ${p.stok < 20 ? `
+          <div class="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-lg shadow text-xs font-bold">
+            <i class="fa-solid fa-exclamation-triangle"></i> Stok Terbatas
+          </div>
+        ` : ''}
+      </div>
+      <div class="p-5">
+        <h3 class="font-bold text-lg text-gray-800 mb-2">${p.nama}</h3>
+        <div class="flex items-center gap-2 mb-3">
+          <div class="bg-green-50 px-3 py-1 rounded-lg flex items-center gap-2">
+            <i class="fa-solid fa-box text-green-600 text-xs"></i>
+            <span class="text-sm font-semibold text-green-700">Stok: ${p.stok}</span>
+          </div>
+        </div>
+        <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+          <div>
+            <p class="text-xs text-gray-500 mb-1">Harga</p>
+            <p class="text-xl font-bold text-green-600">Rp ${Number(p.harga).toLocaleString('id-ID')}</p>
+          </div>
+          <button class="bg-green-500 hover:bg-green-600 text-white p-3 rounded-xl btn-hover">
+            <i class="fa-solid fa-cart-plus"></i>
+          </button>
+        </div>
+      </div>
+    </li>
+  `).join("");
+}
+</script>
+</body>
+</html>
+

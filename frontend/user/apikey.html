@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>API Key Saya – User</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 font-sans min-h-screen p-6">
+
+<h2 class="text-xl font-bold mb-4">API Key Saya</h2>
+
+<div class="space-x-2 mb-4">
+  <button onclick="generate()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"><i class="fa-solid fa-key"></i> Generate API Key</button>
+  <button onclick="checkQuota()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"><i class="fa-solid fa-chart-simple"></i> Cek Kuota</button>
+</div>
+
+<p id="key" class="font-mono text-sm mb-2"></p>
+<p id="quota" class="text-gray-700"></p>
+
+<script src="../js/config.js"></script>
+<script>
+const token = localStorage.getItem("userToken");
+if(!token){ alert("❌ Login terlebih dahulu"); location.href="../login.html"; }
+
+function generate(){
+  fetch(`${BASE_URL}/user/generate-apikey`, { method:"POST", headers:{ Authorization:`Bearer ${token}` } })
+    .then(res=>res.json())
+    .then(data=>{ document.getElementById('key').innerText = "API Key: " + data.api_key; })
+    .catch(()=>alert("❌ Gagal generate API Key"));
+}
+
+function checkQuota(){
+  fetch(`${BASE_URL}/user/apikey`, { headers:{ Authorization:`Bearer ${token}` } })
+    .then(res=>res.json())
+    .then(data=>{
+      document.getElementById('quota').innerText =
+        `Status: ${data.status}\nKuota: ${data.used_daily}/${data.limit_daily}\nTerakhir dipakai: ${data.last_used || '-'}`;
+    })
+    .catch(()=>alert("❌ Gagal cek kuota"));
+}
+</script>
+</body>
+</html>
